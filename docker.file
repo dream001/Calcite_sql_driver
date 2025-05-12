@@ -1,1 +1,27 @@
+# 使用CentOS 7作为基础镜像
+FROM centos:7
 
+# 维护者信息
+LABEL maintainer="your_email@example.com"
+
+# 设置环境变量
+ENV JAVA_HOME=/usr/java/jdk1.7.0_80
+ENV PATH=$JAVA_HOME/bin:$PATH
+ENV LANG=en_US.UTF-8
+
+# 添加Oracle JDK 7 RPM包（需要提前下载）
+COPY jdk-7u80-linux-x64.rpm /tmp/
+
+# 安装JDK 7
+RUN yum install -y /tmp/jdk-7u80-linux-x64.rpm \
+    && rm -f /tmp/jdk-7u80-linux-x64.rpm \
+    && yum clean all
+
+# 验证Java安装
+RUN java -version && javac -version
+
+# 设置工作目录
+WORKDIR /app
+
+# 容器启动命令
+CMD ["bash"]
